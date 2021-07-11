@@ -5,7 +5,7 @@ int minmaxDiff(int a[],int n,int k)
     sort(a,a+n);
     int mini=a[0]+k;
     int maxi = a[n-1]-k;
-    int ans = INT_MAX;
+    int ans = a[n-1]-a[0];
     for(int i=0;i<n-1;i++)
     {
         mini = min(mini,a[i+1]-k);
