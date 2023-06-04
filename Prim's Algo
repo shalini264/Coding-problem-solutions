@@ -1,0 +1,56 @@
+//Prim's Algo
+class Solution {
+public:
+    int minCostConnectPoints(vector<vector<int>>& points) {
+        int n = points.size();
+        vector<pair<int,int>>vec[n+1];
+        for(int i=0;i<points.size()-1;i++)
+        {
+            for(int j=i+1;j<points.size();j++)
+            {
+                int dis = abs(points[i][0]-points[j][0])+abs(points[i][1]-points[j][1]);
+               // cout<<"dis="<<dis<<"\n";
+                vec[i].push_back({j,dis});
+                vec[j].push_back({i,dis});
+            }
+        }
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+        pq.push({0,0});
+        vector<int>weight(n+1,100000000);
+        weight[0]=0;
+        vector<int>visited(n,0);
+        vector<int>parent(n,-1);
+        int ans = 0;
+        while(!pq.empty()&&count(visited.begin(),visited.end(),1)<n)
+        {
+            
+            int u = pq.top().second;
+            int wei = pq.top().first;
+           // cout<<"u="<<u<<"wei="<<wei<<"\n";
+            pq.pop();
+            if(visited[u]==1)
+            continue;
+            ans+=wei;
+            visited[u]=1;
+            for(int i=0;i<vec[u].size();i++)
+            {
+                int v = vec[u][i].first;
+                int w = vec[u][i].second;
+                //different from dijkstra weight is not added 
+                if(w<weight[v]&&visited[v]==0)
+                {
+                    pq.push({w,v});
+                    weight[v]=w;
+                    parent[v] = u;
+                }
+            }
+        }
+        //To print which edges to take
+        for(int i=0;i<n;i++)
+        {
+            cout<<parent[i]<<" ";
+        }
+        //ans= 0;
+    return ans;
+    }
+};
