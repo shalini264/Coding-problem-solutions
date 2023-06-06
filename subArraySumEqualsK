@@ -1,0 +1,23 @@
+//for ith element if currsum == k there may be possible that currsum-num=k=>currsum-k=num i.e. there exists num in prefix sum array which can result to subarray sum k.
+class Solution {
+public:
+    int subarraySum(vector<int>& a, int k) {
+        unordered_map<int,int>mp;
+        int ans = 0,sum=0;
+        for(int i=0;i<a.size();i++)
+        {
+           sum+=a[i];
+           if(sum==k)
+           {
+               ans++;
+           }
+           //check for every case
+           if(mp.find(sum-k)!=mp.end())
+            {
+               ans+=mp[sum-k];
+            }
+           mp[sum]++;
+        }
+       return ans;
+    }
+};
