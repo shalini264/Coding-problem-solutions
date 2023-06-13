@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int ans,n;
+    void binarySearch(vector<int>& nums,int start,int end)
+    {
+        if(start>end)
+        return;
+        int mid = start+(end-start)/2;
+        if(nums[mid]<nums[(mid-1+n)%n]&&nums[mid]<nums[(mid+1)%n])
+          {ans =  nums[mid];
+          return;}
+        else if(nums[mid]<nums[0])
+          binarySearch(nums,start,mid-1);
+        else
+         binarySearch(nums,mid+1,end);
+
+    }
+    int findMin(vector<int>& nums) {
+        n = nums.size();
+        if(n==1||nums[0]<nums[n-1])
+        return nums[0];
+        binarySearch(nums,0,nums.size()-1);
+        return ans;
+    }
+};
