@@ -1,0 +1,102 @@
+class LRUCache {
+public:
+    struct Node{
+       int val;
+       int key;
+       Node* prev;
+       Node* next;  
+       Node(int x,int y)
+       {
+           val = x;
+           key = y;
+           prev = NULL;
+           next = NULL;
+       }
+    };
+    Node* front;
+    Node* rear;
+    unordered_map<int,Node*>mp;
+    int capacity,i=0;
+    LRUCache(int Capacity) {
+        mp.clear();
+        front = new Node(-1,-1);
+        rear = new Node(-1,-1);
+        front->next = rear;
+        rear->prev = front;
+        capacity = Capacity;
+    }
+    
+    int get(int key) {
+        if(mp.find(key)!=mp.end()){
+           int value = mp[key]->val; 
+           Node* x1 = mp[key]->prev;
+           Node* x2 = mp[key]->next;
+           if(x1!=NULL&&x1->next!=NULL)
+           {x1->next = x2;
+           x2->prev = x1;}
+           Node* x4 = new Node(value,key);
+           Node* temp = front->next;
+           x4->next = temp;
+           temp->prev = x4;
+           x4->prev = front;
+           front->next = x4; 
+           mp[key] = front->next;
+           return value;
+        }
+        return -1;
+    }
+    
+    void put(int key, int value) {
+        if(mp.find(key)!=mp.end())
+         {
+           Node* x1 = mp[key]->prev;
+           Node* x2 = mp[key]->next;
+           x1->next = x2;
+           x2->prev = x1;
+           Node* x4 = new Node(value,key);
+           Node* temp = front->next;
+            x4->next = temp;
+             temp->prev = x4;
+            x4->prev = front;
+            front->next = x4; 
+            mp[key] = front->next;
+         }
+        else
+        {
+            if(mp.size()<capacity)
+                {
+                    Node* x4 = new Node(value,key);
+                    Node* temp = front->next;
+                    x4->next = temp;
+                    temp->prev = x4;
+                    x4->prev = front;
+                    front->next = x4; 
+                    mp[key] = front->next;
+                }
+            else{
+                Node* x4 = rear->prev;
+                int key1 = x4->key;
+                if(x4->prev!=NULL)
+                {Node* temp = x4->prev;
+                temp->next = rear;
+                rear->prev = temp;}
+                mp.erase(key1);
+                Node* x5 = new Node(value,key);
+                 Node *x6 = front->next;
+                    x5->next = x6;
+                    x6->prev = x5;
+                    x5->prev = front;
+                    front->next = x5; 
+                    mp[key] = front->next;
+            }
+        }
+        
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
